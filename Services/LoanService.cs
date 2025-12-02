@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using LibraryManagement.Data;
 using LibraryManagement.Entities;
 
 namespace LibraryManagement.Services
 {
     internal class LoanService : ILoanService
     {
+        private readonly IDataStore _store;
+        private const string FileName = "loans.json";
+
+        public LoanService(IDataStore store)
+        {
+            _store = store;
+        }
         public void BorrowBook(int bookId, int memberId)
         {
             throw new NotImplementedException();
