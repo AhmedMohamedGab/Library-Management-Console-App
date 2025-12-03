@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using LibraryManagement.Entities;
 using LibraryManagement.Services;
 
 namespace LibraryManagement.UI
@@ -24,14 +25,14 @@ namespace LibraryManagement.UI
             {
                 Console.Clear();
                 Console.WriteLine("===== Library Management System =====");
-                Console.WriteLine("1. Books");
-                Console.WriteLine("2. Members");
-                Console.WriteLine("3. Loans");
+                Console.WriteLine("1. Manage Books");
+                Console.WriteLine("2. Manage Members");
+                Console.WriteLine("3. Manage Loans");
                 Console.WriteLine("4. Exit");
-                Console.WriteLine("====================================");
+                Console.WriteLine("=====================================");
 
                 Console.Write("Choose an option: ");
-                string choice = Console.ReadLine();
+                var choice = Console.ReadLine();
 
                 switch (choice)
                 {
@@ -73,7 +74,7 @@ namespace LibraryManagement.UI
                 Console.WriteLine("======================");
 
                 Console.Write("Choose an option: ");
-                string choice = Console.ReadLine();
+                var choice = Console.ReadLine();
 
                 switch (choice)
                 {
@@ -101,25 +102,92 @@ namespace LibraryManagement.UI
 
         private void AddBookUI()
         {
-            // TODO: Ask for Title, Author, Category → Call _bookService.AddBook(...)
+            Console.Clear();
+            Console.WriteLine("====== Add Book ======");
+
+            Console.Write("Title: ");
+            string title = Console.ReadLine() ?? "".Trim();
+            Console.Write("Author: ");
+            string author = Console.ReadLine() ?? "".Trim();
+            Console.Write("Category: ");
+            string category = Console.ReadLine() ?? "".Trim();
+
+            var newBook = new Book { Title = title, Author = author, Category = category };
+            bool success = _bookService.AddBook(newBook);
+            Console.WriteLine(success
+            ? "Book added successfully."
+            : "Failed to add book. It may already exist or data was invalid.");
+
             Pause();
         }
 
         private void ListBooksUI()
         {
-            // TODO: Display books from _bookService.GetAllBooks()
+            Console.Clear();
+            Console.WriteLine("====== Books List ======");
+
+            var books = _bookService.GetAllBooks();
+
+            if (books.Count == 0)
+            {
+                Console.WriteLine("No books found.");
+            }
+            else
+            {
+                foreach (var book in books)
+                {
+                    Console.WriteLine($"{book.Id} | {book.Title} by {book.Author} | Category: {book.Category}");
+                }
+            }
+
             Pause();
         }
 
         private void SearchBooksUI()
         {
-            // TODO: Ask for keyword → Call _bookService.SearchBooks(...)
+            Console.Clear();
+            Console.WriteLine("====== Search Books ======");
+            Console.Write("Enter a keyword to search (title, author, or category): ");
+            string term = Console.ReadLine() ?? "";
+
+            var results = _bookService.SearchBooks(term);
+
+            if (results.Count == 0)
+            {
+                Console.WriteLine("No matching books found.");
+            }
+            else
+            {
+                Console.WriteLine("Results:");
+                foreach (var book in results)
+                {
+                    Console.WriteLine($"{book.Id} | {book.Title} by {book.Author} | Category: {book.Category}");
+                }
+            }
+
             Pause();
         }
 
         private void RemoveBookUI()
         {
-            // TODO: Ask for ID → Call _bookService.RemoveBook(id)
+            Console.Clear();
+            Console.WriteLine("====== Remove Book ======");
+
+            Console.Write("ID: ");
+            bool success = int.TryParse(Console.ReadLine() ?? "", out int id);
+
+            if (!success)
+            {
+                Console.WriteLine("Failed to remove book. This ID is invalid.");
+                Pause();
+                return;
+            }
+
+            success = _bookService.RemoveBook(id);
+            Console.WriteLine(success
+            ? "Book removed successfully."
+            : "Failed to remove book. This ID is invalid.");
+
             Pause();
         }
 
@@ -139,7 +207,7 @@ namespace LibraryManagement.UI
                 Console.WriteLine("========================");
 
                 Console.Write("Choose an option: ");
-                string choice = Console.ReadLine();
+                var choice = Console.ReadLine();
 
                 switch (choice)
                 {
@@ -186,10 +254,10 @@ namespace LibraryManagement.UI
                 Console.WriteLine("3. List Active Loans");
                 Console.WriteLine("4. List All Loans");
                 Console.WriteLine("5. Back To Main Menu");
-                Console.WriteLine("=======================");
+                Console.WriteLine("======================");
 
                 Console.Write("Choose an option: ");
-                string choice = Console.ReadLine();
+                var choice = Console.ReadLine();
 
                 switch (choice)
                 {

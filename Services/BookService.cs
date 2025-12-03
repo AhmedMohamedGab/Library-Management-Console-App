@@ -15,29 +15,64 @@ namespace LibraryManagement.Services
         {
             _store = store;
         }
-        public void AddBook(Book book)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Book> GetAllBooks()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Book? GetBookById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveBook(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<Book> SearchBooks(string keyword)
         {
-            throw new NotImplementedException();
+            var books = _store.Load<Book>(FileName);
+            var searchedBooks = new List<Book>();
+
+            foreach (var book in books)
+            {
+                if (book.Title.Contains(keyword) || book.Author.Contains(keyword) || book.Category.Contains(keyword))
+                {
+                    searchedBooks.Add(book);
+                }
+            }
+
+            return searchedBooks;
+        }
+        public bool AddBook(Book book)
+        {
+            if (book.Title == "" || book.Author == "" || book.Category == "") return false;
+
+            var books = _store.Load<Book>(FileName);
+
+            foreach (var searchedBook in books)
+            {
+                if (searchedBook.Title == book.Title && searchedBook.Author == book.Author) return false;
+            }
+
+            book.Id = books.Count + 1;
+            books.Add(book);
+            _store.Save<Book>(FileName, books);
+
+            return true;
+        }
+        public bool RemoveBook(int id)
+        {
+            var books = _store.Load<Book>(FileName);
+
+            if (id <= 0 || id > books.Count) return false;
+
+            books.RemoveAt(id - 1);
+
+            for (int i = id - 1; i < books.Count; i++)
+            {
+                books[i].Id--;
+            }
+
+            _store.Save<Book>(FileName, books);
+
+            return true;
+        }
+        //public Book? GetBookById(int id)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        public List<Book> GetAllBooks()
+        {
+            var books = _store.Load<Book>(FileName);
+
+            return books;
         }
     }
 }

@@ -7,10 +7,10 @@ namespace LibraryManagement.Services
 {
     internal interface IBookService
     {
-        void AddBook(Book book);
-        void RemoveBook(int id);
-        Book? GetBookById(int id);
-        List<Book> GetAllBooks();
         List<Book> SearchBooks(string keyword);
+        bool AddBook(Book book);
+        bool RemoveBook(int id);
+        //Book? GetBookById(int id);
+        List<Book> GetAllBooks();
     }
 }
