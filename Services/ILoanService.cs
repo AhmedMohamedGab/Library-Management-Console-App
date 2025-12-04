@@ -7,9 +7,8 @@ namespace LibraryManagement.Services
 {
     internal interface ILoanService
     {
-        void BorrowBook(int bookId, int memberId);
-        void ReturnBook(int loanId);
-        Loan? GetLoanById(int id);
+        bool BorrowBook(int memberId, int bookId);
+        bool ReturnBook(int loanId);
         List<Loan> GetActiveLoans();
         List<Loan> GetAllLoans();
     }

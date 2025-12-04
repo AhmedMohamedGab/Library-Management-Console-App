@@ -69,8 +69,7 @@ namespace LibraryManagement.UI
                 Console.WriteLine("1. Add Book");
                 Console.WriteLine("2. List All Books");
                 Console.WriteLine("3. Search Books");
-                Console.WriteLine("4. Remove Book");
-                Console.WriteLine("5. Back To Main Menu");
+                Console.WriteLine("4. Back To Main Menu");
                 Console.WriteLine("======================");
 
                 Console.Write("Choose an option: ");
@@ -88,9 +87,6 @@ namespace LibraryManagement.UI
                         SearchBooksUI();
                         break;
                     case "4":
-                        RemoveBookUI();
-                        break;
-                    case "5":
                         return;
                     default:
                         Console.WriteLine("Invalid option.");
@@ -168,29 +164,6 @@ namespace LibraryManagement.UI
             Pause();
         }
 
-        private void RemoveBookUI()
-        {
-            Console.Clear();
-            Console.WriteLine("====== Remove Book ======");
-
-            Console.Write("ID: ");
-            bool success = int.TryParse(Console.ReadLine() ?? "", out int id);
-
-            if (!success)
-            {
-                Console.WriteLine("Failed to remove book. This ID is invalid.");
-                Pause();
-                return;
-            }
-
-            success = _bookService.RemoveBook(id);
-            Console.WriteLine(success
-            ? "Book removed successfully."
-            : "Failed to remove book. This ID is invalid.");
-
-            Pause();
-        }
-
         // ============================================================
         // MEMBERS MENU
         // ============================================================
@@ -229,13 +202,43 @@ namespace LibraryManagement.UI
 
         private void AddMemberUI()
         {
-            // TODO: Ask for name & phone → Call _memberService.AddMember(...)
+            Console.Clear();
+            Console.WriteLine("====== Add Member ======");
+
+            Console.Write("Name: ");
+            string name = Console.ReadLine() ?? "";
+
+            Console.Write("Phone: ");
+            string phone = Console.ReadLine() ?? "";
+
+            var newMember = new Member { Name = name, Phone = phone };
+            bool success = _memberService.AddMember(newMember);
+            Console.WriteLine(success
+            ? "Member added successfully."
+            : "Failed to add member. He/She may already exist or data was invalid.");
+
             Pause();
         }
 
         private void ListMembersUI()
         {
-            // TODO: Display members from _memberService.GetAllMembers()
+            Console.Clear();
+            Console.WriteLine("====== Members List ======");
+
+            var members = _memberService.GetAllMembers();
+
+            if (members.Count == 0)
+            {
+                Console.WriteLine("No members found.");
+            }
+            else
+            {
+                foreach (var member in members)
+                {
+                    Console.WriteLine($"{member.Id} | {member.Name} | {member.Phone}");
+                }
+            }
+
             Pause();
         }
 

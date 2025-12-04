@@ -15,6 +15,7 @@ namespace LibraryManagement.Services
         {
             _store = store;
         }
+
         public List<Book> SearchBooks(string keyword)
         {
             var books = _store.Load<Book>(FileName);
@@ -30,6 +31,7 @@ namespace LibraryManagement.Services
 
             return searchedBooks;
         }
+
         public bool AddBook(Book book)
         {
             if (book.Title == "" || book.Author == "" || book.Category == "") return false;
@@ -47,27 +49,7 @@ namespace LibraryManagement.Services
 
             return true;
         }
-        public bool RemoveBook(int id)
-        {
-            var books = _store.Load<Book>(FileName);
 
-            if (id <= 0 || id > books.Count) return false;
-
-            books.RemoveAt(id - 1);
-
-            for (int i = id - 1; i < books.Count; i++)
-            {
-                books[i].Id--;
-            }
-
-            _store.Save<Book>(FileName, books);
-
-            return true;
-        }
-        //public Book? GetBookById(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
         public List<Book> GetAllBooks()
         {
             var books = _store.Load<Book>(FileName);

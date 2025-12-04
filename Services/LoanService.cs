@@ -15,7 +15,13 @@ namespace LibraryManagement.Services
         {
             _store = store;
         }
-        public void BorrowBook(int bookId, int memberId)
+
+        public bool BorrowBook(int memberId, int bookId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ReturnBook(int loanId)
         {
             throw new NotImplementedException();
         }
@@ -26,16 +32,6 @@ namespace LibraryManagement.Services
         }
 
         public List<Loan> GetAllLoans()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Loan? GetLoanById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReturnBook(int loanId)
         {
             throw new NotImplementedException();
         }

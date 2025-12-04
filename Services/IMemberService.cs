@@ -7,8 +7,7 @@ namespace LibraryManagement.Services
 {
     internal interface IMemberService
     {
-        void AddMember(Member member);
-        Member? GetMemberById(int id);
+        bool AddMember(Member member);
         List<Member> GetAllMembers();
     }
 }

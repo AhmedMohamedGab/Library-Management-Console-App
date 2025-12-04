@@ -15,19 +15,30 @@ namespace LibraryManagement.Services
         {
             _store = store;
         }
-        public void AddMember(Member member)
+
+        public bool AddMember(Member member)
         {
-            throw new NotImplementedException();
+            if (member.Name == "" || member.Phone == "") return false;
+
+            var members = _store.Load<Member>(FileName);
+
+            foreach (var searchedMember in members)
+            {
+                if (searchedMember.Name == member.Name && searchedMember.Phone == member.Phone) return false;
+            }
+
+            member.Id = members.Count + 1;
+            members.Add(member);
+            _store.Save<Member>(FileName, members);
+
+            return true;
         }
 
         public List<Member> GetAllMembers()
         {
-            throw new NotImplementedException();
-        }
+            var members = _store.Load<Member>(FileName);
 
-        public Member? GetMemberById(int id)
-        {
-            throw new NotImplementedException();
+            return members;
         }
     }
 }
