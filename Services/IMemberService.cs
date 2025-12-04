@@ -9,5 +9,6 @@ namespace LibraryManagement.Services
     {
         bool AddMember(Member member);
         List<Member> GetAllMembers();
+        List<Member> SearchMembers(string keyword);
     }
 }

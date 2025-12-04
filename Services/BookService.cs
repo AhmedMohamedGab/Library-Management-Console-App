@@ -19,35 +19,45 @@ namespace LibraryManagement.Services
         public List<Book> SearchBooks(string keyword)
         {
             var books = _store.Load<Book>(FileName);
-            var searchedBooks = new List<Book>();
+            var results = books.FindAll(b => b.ISBN.Contains(keyword) ||
+                                             b.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                             b.Author.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                             b.Category.Contains(keyword, StringComparison.OrdinalIgnoreCase));
 
-            foreach (var book in books)
-            {
-                if (book.Title.Contains(keyword) || book.Author.Contains(keyword) || book.Category.Contains(keyword))
-                {
-                    searchedBooks.Add(book);
-                }
-            }
-
-            return searchedBooks;
+            return results;
         }
 
         public bool AddBook(Book book)
         {
-            if (book.Title == "" || book.Author == "" || book.Category == "") return false;
+            if (book.Title == "" || book.Author == "" || book.Category == "" || book.ISBN == "") return false;
 
             var books = _store.Load<Book>(FileName);
 
-            foreach (var searchedBook in books)
-            {
-                if (searchedBook.Title == book.Title && searchedBook.Author == book.Author) return false;
-            }
+            var searchedBook = books.Find(b => b.ISBN == book.ISBN);
+            if (searchedBook != null) return false;
 
-            book.Id = books.Count + 1;
             books.Add(book);
             _store.Save<Book>(FileName, books);
 
             return true;
+        }
+
+        public bool RemoveBook(string ISBN)
+        {
+            var books = _store.Load<Book>(FileName);
+            var bookToRemove = books.Find(b => b.ISBN == ISBN);
+            if (bookToRemove == null) return false;
+            books.Remove(bookToRemove);
+            _store.Save<Book>(FileName, books);
+            return true;
+        }
+
+        public List<Book> GetAvailableBooks()
+        {
+            var books = _store.Load<Book>(FileName);
+            var availableBooks = books.FindAll(b => b.IsAvailable);
+
+            return availableBooks;
         }
 
         public List<Book> GetAllBooks()

@@ -9,6 +9,8 @@ namespace LibraryManagement.Services
     {
         List<Book> SearchBooks(string keyword);
         bool AddBook(Book book);
+        bool RemoveBook(string ISBN);
+        List<Book> GetAvailableBooks();
         List<Book> GetAllBooks();
     }
 }

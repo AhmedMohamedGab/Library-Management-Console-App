@@ -67,9 +67,11 @@ namespace LibraryManagement.UI
                 Console.Clear();
                 Console.WriteLine("===== Books Menu =====");
                 Console.WriteLine("1. Add Book");
-                Console.WriteLine("2. List All Books");
-                Console.WriteLine("3. Search Books");
-                Console.WriteLine("4. Back To Main Menu");
+                Console.WriteLine("2. List Available Books");
+                Console.WriteLine("3. List All Books");
+                Console.WriteLine("4. Search Books");
+                Console.WriteLine("5. Remove Book");
+                Console.WriteLine("6. Back To Main Menu");
                 Console.WriteLine("======================");
 
                 Console.Write("Choose an option: ");
@@ -81,12 +83,18 @@ namespace LibraryManagement.UI
                         AddBookUI();
                         break;
                     case "2":
-                        ListBooksUI();
+                        ListAvailableBooksUI();
                         break;
                     case "3":
-                        SearchBooksUI();
+                        ListAllBooksUI();
                         break;
                     case "4":
+                        SearchBooksUI();
+                        break;
+                    case "5":
+                        RemoveBookUI();
+                        break;
+                    case "6":
                         return;
                     default:
                         Console.WriteLine("Invalid option.");
@@ -107,8 +115,10 @@ namespace LibraryManagement.UI
             string author = Console.ReadLine() ?? "".Trim();
             Console.Write("Category: ");
             string category = Console.ReadLine() ?? "".Trim();
+            Console.Write("ISBN: ");
+            string isbn = Console.ReadLine() ?? "".Trim();
 
-            var newBook = new Book { Title = title, Author = author, Category = category };
+            var newBook = new Book { ISBN = isbn, Title = title, Author = author, Category = category };
             bool success = _bookService.AddBook(newBook);
             Console.WriteLine(success
             ? "Book added successfully."
@@ -117,22 +127,40 @@ namespace LibraryManagement.UI
             Pause();
         }
 
-        private void ListBooksUI()
+        private void ListAvailableBooksUI()
         {
             Console.Clear();
-            Console.WriteLine("====== Books List ======");
+            Console.WriteLine("====== Available Books List ======");
 
-            var books = _bookService.GetAllBooks();
+            var availableBooks = _bookService.GetAvailableBooks();
 
-            if (books.Count == 0)
-            {
-                Console.WriteLine("No books found.");
-            }
+            if (availableBooks.Count == 0) Console.WriteLine("No books found.");
             else
             {
-                foreach (var book in books)
+                for (int i = 0; i < availableBooks.Count; i++)
                 {
-                    Console.WriteLine($"{book.Id} | {book.Title} by {book.Author} | Category: {book.Category}");
+                    Console.WriteLine($"{i + 1} | {availableBooks[i].Title} by {availableBooks[i].Author}" +
+                        $" | Category: {availableBooks[i].Category} | ISBN: {availableBooks[i].ISBN}");
+                }
+            }
+
+            Pause();
+        }
+
+        private void ListAllBooksUI()
+        {
+            Console.Clear();
+            Console.WriteLine("====== All Books List ======");
+
+            var allBooks = _bookService.GetAllBooks();
+
+            if (allBooks.Count == 0) Console.WriteLine("No books found.");
+            else
+            {
+                for (int i = 0; i < allBooks.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1} | {allBooks[i].Title} by {allBooks[i].Author}" +
+                        $" | Category: {allBooks[i].Category} | ISBN: {allBooks[i].ISBN}");
                 }
             }
 
@@ -143,23 +171,37 @@ namespace LibraryManagement.UI
         {
             Console.Clear();
             Console.WriteLine("====== Search Books ======");
-            Console.Write("Enter a keyword to search (title, author, or category): ");
-            string term = Console.ReadLine() ?? "";
+            Console.Write("Enter a keyword to search (title, author, category, or ISBN): ");
+            string keyword = Console.ReadLine() ?? "";
 
-            var results = _bookService.SearchBooks(term);
+            var results = _bookService.SearchBooks(keyword);
 
-            if (results.Count == 0)
-            {
-                Console.WriteLine("No matching books found.");
-            }
+            if (results.Count == 0) Console.WriteLine("No matching books found.");
             else
             {
                 Console.WriteLine("Results:");
-                foreach (var book in results)
+                for (int i = 0; i < results.Count; i++)
                 {
-                    Console.WriteLine($"{book.Id} | {book.Title} by {book.Author} | Category: {book.Category}");
+                    Console.WriteLine($"{i + 1} | {results[i].Title} by {results[i].Author}" +
+                        $" | Category: {results[i].Category} | ISBN: {results[i].ISBN}");
                 }
             }
+
+            Pause();
+        }
+
+        private void RemoveBookUI()
+        {
+            Console.Clear();
+            Console.WriteLine("====== Remove Book ======");
+
+            Console.Write("ISBN: ");
+            string ISBN = Console.ReadLine() ?? "";
+
+            bool success = _bookService.RemoveBook(ISBN);
+            Console.WriteLine(success
+            ? "Book removed successfully."
+            : "Failed to remove book. This ISBN is invalid.");
 
             Pause();
         }
@@ -176,7 +218,8 @@ namespace LibraryManagement.UI
                 Console.WriteLine("===== Members Menu =====");
                 Console.WriteLine("1. Add Member");
                 Console.WriteLine("2. List All Members");
-                Console.WriteLine("3. Back To Main Menu");
+                Console.WriteLine("3. Search Members");
+                Console.WriteLine("4. Back To Main Menu");
                 Console.WriteLine("========================");
 
                 Console.Write("Choose an option: ");
@@ -191,6 +234,9 @@ namespace LibraryManagement.UI
                         ListMembersUI();
                         break;
                     case "3":
+                        SearchMembersUI();
+                        break;
+                    case "4":
                         return;
                     default:
                         Console.WriteLine("Invalid option.");
@@ -227,13 +273,32 @@ namespace LibraryManagement.UI
 
             var members = _memberService.GetAllMembers();
 
-            if (members.Count == 0)
-            {
-                Console.WriteLine("No members found.");
-            }
+            if (members.Count == 0) Console.WriteLine("No members found.");
             else
             {
                 foreach (var member in members)
+                {
+                    Console.WriteLine($"{member.Id} | {member.Name} | {member.Phone}");
+                }
+            }
+
+            Pause();
+        }
+
+        private void SearchMembersUI()
+        {
+            Console.Clear();
+            Console.WriteLine("====== Search Members ======");
+            Console.Write("Enter a keyword to search (name or phone): ");
+            string keyword = Console.ReadLine() ?? "";
+
+            var results = _memberService.SearchMembers(keyword);
+
+            if (results.Count == 0) Console.WriteLine("No matching members found.");
+            else
+            {
+                Console.WriteLine("Results:");
+                foreach (var member in results)
                 {
                     Console.WriteLine($"{member.Id} | {member.Name} | {member.Phone}");
                 }
