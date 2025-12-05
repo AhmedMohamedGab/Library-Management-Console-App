@@ -1,10 +1,9 @@
-# Library Management Console App
+﻿# Library Management Console App
 
 A simple, extensible console-based library management system built using C#, OOP, and SOLID principles.
 It demonstrates working with abstractions, layered architecture, JSON persistence, and clean console UI.
 
 ## Features
-
 ### Books
 - Add new books
 - List all books or only available books
@@ -23,7 +22,7 @@ It demonstrates working with abstractions, layered architecture, JSON persistenc
 
 ### Data Persistence
 - All data (books, members, loans) is stored in JSON files
-- Fully offline � no database required
+- Fully offline — no database required
 
 ## Prerequisites
 - .NET 10 SDK
@@ -32,28 +31,28 @@ It demonstrates working with abstractions, layered architecture, JSON persistenc
 
 ## Project Structure
 LibraryManagement/
-|
-|�� Entities/
-|   |�� Book.cs
-|   |�� Member.cs
-|   |�� Loan.cs
-|
-|�� Services/
-|   |�� IBookService.cs
-|   |�� BookService.cs
-|   |�� IMemberService.cs
-|   |�� MemberService.cs
-|   |�� ILoanService.cs
-|   |�� LoanService.cs
-|
-|�� Data/
-|   |�� IDataStore.cs
-|   |�� DataStore.cs
-|
-|�� UI/
-|   |�� Menu.cs
-|
-|�� Program.cs
+│
+├── Entities/
+│   ├── Book.cs
+│   ├── Member.cs
+│   └── Loan.cs
+│
+├── Services/
+│   ├── IBookService.cs
+│   ├── BookService.cs
+│   ├── IMemberService.cs
+│   ├── MemberService.cs
+│   ├── ILoanService.cs
+│   └── LoanService.cs
+│
+├── Data/
+│   ├── IDataStore.cs
+│   └── DataStore.cs
+│
+├── UI/
+│   └── Menu.cs
+│
+└── Program.cs
 
 ## Getting Started
 1. Clone the repository: `git clone https://github.com/AhmedMohamedGab/Library-Management-Console-App.git`
