@@ -16,17 +16,17 @@ namespace LibraryManagement.Services
             _store = store;
         }
 
-        public bool AddMember(Member member)
+        public bool AddMember(string name, string phone)
         {
-            if (member.Name == "" || member.Phone == "") return false;
+            if (name == "" || phone == "") return false;
 
             var members = _store.Load<Member>(FileName);
-            var searchedMember = members.Find(m => m.Name.Equals(member.Name, StringComparison.OrdinalIgnoreCase) &&
-                                                   m.Phone == member.Phone);
+            var searchedMember = members.Find(m => m.Name.Equals(name, StringComparison.OrdinalIgnoreCase) &&
+                                                   m.Phone == phone);
             if (searchedMember != null) return false;
 
-            member.Id = members.Count + 1;
-            members.Add(member);
+            var newMember = new Member { Id = members.Count + 1, Name = name, Phone = phone };
+            members.Add(newMember);
             _store.Save<Member>(FileName, members);
 
             return true;

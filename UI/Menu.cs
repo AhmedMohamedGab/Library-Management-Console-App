@@ -118,8 +118,7 @@ namespace LibraryManagement.UI
             Console.Write("ISBN: ");
             string isbn = Console.ReadLine() ?? "".Trim();
 
-            var newBook = new Book { ISBN = isbn, Title = title, Author = author, Category = category };
-            bool success = _bookService.AddBook(newBook);
+            bool success = _bookService.AddBook(isbn, title, author, category);
             Console.WriteLine(success
             ? "Book added successfully."
             : "Failed to add book. It may already exist or data was invalid.");
@@ -257,8 +256,7 @@ namespace LibraryManagement.UI
             Console.Write("Phone: ");
             string phone = Console.ReadLine() ?? "";
 
-            var newMember = new Member { Name = name, Phone = phone };
-            bool success = _memberService.AddMember(newMember);
+            bool success = _memberService.AddMember(name, phone);
             Console.WriteLine(success
             ? "Member added successfully."
             : "Failed to add member. He/She may already exist or data was invalid.");
@@ -353,25 +351,78 @@ namespace LibraryManagement.UI
 
         private void BorrowBookUI()
         {
-            // TODO: Ask for Book ID & Member ID → Call _loanService.BorrowBook(...)
+            Console.Clear();
+            Console.WriteLine("====== Borrow Book ======");
+
+            Console.Write("Member ID: ");
+            int.TryParse(Console.ReadLine(), out int memberId);
+
+            Console.Write("Book ID: ");
+            string bookId = Console.ReadLine() ?? "";
+
+            bool success = _loanService.BorrowBook(memberId, bookId);
+
+            Console.WriteLine(success
+                ? "Book borrowed successfully."
+                : "Borrowing failed. Check that member exists, book exists and is available.");
+
             Pause();
         }
 
         private void ReturnBookUI()
         {
-            // TODO: Ask for Loan ID → Call _loanService.ReturnBook(...)
+            Console.Clear();
+            Console.WriteLine("====== Return Book ======");
+
+            Console.Write("Loan ID: ");
+            int.TryParse(Console.ReadLine(), out int loanId);
+
+            bool success = _loanService.ReturnBook(loanId);
+
+            Console.WriteLine(success
+                ? "Book returned successfully."
+                : "Return failed. Check the loan ID.");
+
             Pause();
         }
 
         private void ListActiveLoansUI()
         {
-            // TODO: Display loans with _loanService.GetActiveLoans()
+            Console.Clear();
+            Console.WriteLine("====== Active Loans List ======");
+
+            var activeLoans = _loanService.GetActiveLoans();
+
+            if (activeLoans.Count == 0) Console.WriteLine("No active loans recorded.");
+            else
+            {
+                foreach (var loan in activeLoans)
+                {
+                    var returnDateStr = loan.ReturnDate == null ? "Not returned yet" : "Returned on " + loan.ReturnDate.Value.ToLongDateString();
+                    Console.WriteLine($"{loan.Id} | Book: {loan.BookId} | Member: {loan.MemberId} | Borrowed on {loan.BorrowDate.ToLongDateString()} | {returnDateStr}");
+                }
+            }
+
             Pause();
         }
 
         private void ListAllLoansUI()
         {
-            // TODO: Display all loans with _loanService.GetAllLoans()
+            Console.Clear();
+            Console.WriteLine("====== All Loans List ======");
+
+            var loans = _loanService.GetAllLoans();
+
+            if (loans.Count == 0) Console.WriteLine("No loans recorded.");
+            else
+            {
+                foreach (var loan in loans)
+                {
+                    var returnDateStr = loan.ReturnDate == null ? "Not returned yet" : "Returned on " + loan.ReturnDate.Value.ToLongDateString();
+                    Console.WriteLine($"{loan.Id} | Book: {loan.BookId} | Member: {loan.MemberId} | Borrowed on {loan.BorrowDate.ToLongDateString()} | {returnDateStr}");
+                }
+            }
+
             Pause();
         }
 

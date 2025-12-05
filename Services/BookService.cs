@@ -27,16 +27,17 @@ namespace LibraryManagement.Services
             return results;
         }
 
-        public bool AddBook(Book book)
+        public bool AddBook(string isbn, string title, string author, string category)
         {
-            if (book.Title == "" || book.Author == "" || book.Category == "" || book.ISBN == "") return false;
+            if (isbn == "" || title == "" || author == "" || category == "") return false;
 
             var books = _store.Load<Book>(FileName);
 
-            var searchedBook = books.Find(b => b.ISBN == book.ISBN);
+            var searchedBook = books.Find(b => b.ISBN == isbn);
             if (searchedBook != null) return false;
 
-            books.Add(book);
+            var newBook = new Book { ISBN = isbn, Title = title, Author = author, Category = category };
+            books.Add(newBook);
             _store.Save<Book>(FileName, books);
 
             return true;
