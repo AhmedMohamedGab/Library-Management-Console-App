@@ -30,6 +30,7 @@ It demonstrates working with abstractions, layered architecture, JSON persistenc
 - Git
 
 ## Project Structure
+```text
 LibraryManagement/
 │
 ├── Entities/
@@ -53,6 +54,7 @@ LibraryManagement/
 │   └── Menu.cs
 │
 └── Program.cs
+```
 
 ## Getting Started
 1. Clone the repository: `git clone https://github.com/AhmedMohamedGab/Library-Management-Console-App.git`
