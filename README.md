@@ -77,15 +77,15 @@ dotnet restore dotnet build dotnet run --project src/LibraryManagement
 
 ## Screenshots
 - Main Menu Screenshot
-
+:----:
 ![Main Menu Screenshot](assets/main-menu.png)
 
 - Books Menu Screenshot
-
+:----:
 ![Books Menu Screenshot](assets/books-menu.png)
 
 - Search Members Results Screenshot
-
+:----:
 ![Search Members Results Screenshot](assets/search-members.png)
 
 
